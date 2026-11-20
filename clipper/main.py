@@ -11,6 +11,7 @@ Uso:
   python -m clipper.main --arquivo video.mp4  # só renderiza um arquivo local (teste de visual)
 """
 import argparse
+import re
 import itertools
 import os
 import tempfile
@@ -116,6 +117,10 @@ def cota_streamer_ok(cfg, st, streamer, horario) -> bool:
 
 
 # ---------------------------------------------------------------- produção
+class ConteudoBloqueado(Exception):
+    pass
+
+
 def produzir(c: Candidato, cfg: dict, pasta: str) -> tuple[str, dict, str | None]:
     v = cfg["video"]
     bruto = os.path.join(pasta, "bruto.mp4")
@@ -129,6 +134,13 @@ def produzir(c: Candidato, cfg: dict, pasta: str) -> tuple[str, dict, str | None
             palavras = legendas.transcrever(bruto, v.get("modelo_whisper", "small"), idioma)
         except Exception as e:
             print(f"  [legenda] falhou: {e}")
+
+    # 0) filtro de conteúdo: fala sexual explícita derruba conta e é proibida nas campanhas
+    proibidas = [p.lower() for p in cfg.get("palavras_proibidas") or []]
+    falado = " ".join(w["texto"] for w in palavras).lower()
+    achou = [p for p in proibidas if re.search(rf"\b{re.escape(p)}", falado)]
+    if achou:
+        raise ConteudoBloqueado(f"palavras proibidas: {achou}")
 
     # 1) onde está a câmera do streamer (config manual > detecção automática)
     fc = c.extra.get("facecam")
@@ -305,6 +317,9 @@ def rodar(teste: bool = False):
                 "gancho": txt["gancho"], "avisado_publicacao": False,
             })
             feitos += 1
+        except ConteudoBloqueado as e:
+            print(f"  ✖ pulado ({e})")
+            horarios = proximos_horarios(cfg, st)
         except Exception:
             traceback.print_exc()
             # devolve o horário pra fila tentando outro clipe

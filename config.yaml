@@ -63,6 +63,9 @@ temas_em_alta:
     palavras: ["cheat", "código", "codigo", "segredo", "easter egg", "escondido"]
     hashtags: ["#cheatsgta6", "#easteregg"]
 
+# Se o streamer falar alguma dessas palavras no clipe, o robô pula (conta nova + regra das campanhas)
+palavras_proibidas: ["gangbang", "porn", "pussy", "dick", "cum", "nude", "nudes", "sexo", "buceta", "pelada", "putaria", "transar", "nigga", "nigger", "retard"]
+
 # Clipes que o robô NÃO deve usar (ex.: conteúdo sensual/18+ que derruba conta nova)
 pular:
   - "kick:clip_01M7SNVFD8NQGRGY98AKM6W4SG"
