@@ -138,7 +138,7 @@ def produzir(c: Candidato, cfg: dict, pasta: str) -> tuple[str, dict, str | None
     # 0) filtro de conteúdo: fala sexual explícita derruba conta e é proibida nas campanhas
     proibidas = [p.lower() for p in cfg.get("palavras_proibidas") or []]
     falado = " ".join(w["texto"] for w in palavras).lower()
-    achou = [p for p in proibidas if re.search(rf"\b{re.escape(p)}", falado)]
+    achou = [p for p in proibidas if re.search(rf"\b{re.escape(p)}\b", falado)]
     if achou:
         raise ConteudoBloqueado(f"palavras proibidas: {achou}")
 
