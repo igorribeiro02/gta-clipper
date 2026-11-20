@@ -1,4 +1,30 @@
 {
- "vistos": {},
- "agendados": []
+ "vistos": {
+  "kick:clip_01M7SFMAS45A904V70KC8FMSSV": 1795173575.740221,
+  "kick:clip_01M7SG4P12A3G6KD0R2CB8XHBS": 1795173662.670136
+ },
+ "agendados": [
+  {
+   "chave": "kick:clip_01M7SFMAS45A904V70KC8FMSSV",
+   "streamer": "Coringa",
+   "horario": "2026-11-20T11:30:00",
+   "vod_id": "138701863",
+   "vod_offset": null,
+   "ts": 1795173575.7402182,
+   "post_id": null,
+   "gancho": "O COMEÇO DO GTA 6 COM O CORINGA",
+   "avisado_publicacao": true
+  },
+  {
+   "chave": "kick:clip_01M7SG4P12A3G6KD0R2CB8XHBS",
+   "streamer": "Coringa",
+   "horario": "2026-11-20T13:00:00",
+   "vod_id": "138701863",
+   "vod_offset": null,
+   "ts": 1795173662.6701336,
+   "post_id": null,
+   "gancho": "Olha o que aconteceu na live do Coringa",
+   "avisado_publicacao": true
+  }
+ ]
 }
