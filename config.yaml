@@ -24,7 +24,7 @@ postagem:
 
 # Filtros de qualidade
 filtros:
-  janela_horas: 8          # só considera clipes criados nas últimas X horas
+  janela_horas: 30         # só considera clipes criados nas últimas X horas
   views_minimas_twitch: 30
   views_minimas_kick: 30
   duracao_min_s: 10
@@ -35,7 +35,7 @@ video:
   legendas: true           # transcreve o áudio e queima legenda estilo TikTok
   modelo_whisper: small    # tiny | base | small (small = melhor custo/benefício)
   idioma: pt
-  hashtags: ["#gta", "#gtarp", "#gtav", "#cortes"]
+  hashtags: ["#gta6", "#gta", "#gtarp", "#cortes"]
 
 # ----------------------------------------------------------
 # Streamers. O robô SÓ clipa quem tiver "autorizado: true".
@@ -58,13 +58,6 @@ streamers:
     canal: coringa
     autorizado: true
     onde_autorizou: "autorização direta ao Igor (20/11/2026)"
-
-  - nome: Coringa (Twitch)
-    plataforma: twitch
-    canal: loud_coringa
-    autorizado: true
-    onde_autorizou: "autorização direta ao Igor (20/11/2026)"
-    editor: false
 
   - nome: Davy Jones
     plataforma: twitch
