@@ -50,6 +50,7 @@ def coletar(cfg: dict) -> list[Candidato]:
             print(f"[{s['plataforma']}] {s['nome']}: {len(achados)} candidatos")
             for c in achados:
                 c.extra["facecam"] = s.get("facecam")
+                c.extra["cfg_streamer"] = s
             todos += achados
         except Exception as e:
             print(f"[{s['plataforma']}] {s['nome']}: ERRO {e}")
@@ -78,7 +79,13 @@ def filtrar_e_ranquear(cands: list[Candidato], cfg: dict, st: dict) -> list[Cand
             continue
         unicos.append(c)
     # velocidade: clipe novo com muita view sobe na frente
-    unicos.sort(key=lambda c: c.views / (c.idade_horas(agora) + 2) ** 1.3, reverse=True)
+    temas = cfg.get("temas_em_alta") or []
+
+    def nota(c):
+        n, _ = textos.detectar_temas(c.titulo, temas)
+        return c.views / (c.idade_horas(agora) + 2) ** 1.3 * (1 + 0.6 * n)
+
+    unicos.sort(key=nota, reverse=True)
     return unicos
 
 
@@ -118,7 +125,8 @@ def produzir(c: Candidato, cfg: dict, pasta: str) -> tuple[str, dict, str | None
     palavras = []
     if v.get("legendas", True):
         try:
-            palavras = legendas.transcrever(bruto, v.get("modelo_whisper", "small"), v.get("idioma", "pt"))
+            idioma = (c.extra.get("cfg_streamer") or {}).get("idioma") or v.get("idioma", "pt")
+            palavras = legendas.transcrever(bruto, v.get("modelo_whisper", "small"), idioma)
         except Exception as e:
             print(f"  [legenda] falhou: {e}")
 
@@ -140,6 +148,7 @@ def produzir(c: Candidato, cfg: dict, pasta: str) -> tuple[str, dict, str | None
     print(f"  [destaque] {ini:.0f}s–{fim:.0f}s de {dur_total:.0f}s ({'IA' if analise else 'volume+fala'})")
     palavras_trecho = destaque.deslocar(palavras, ini, fim)
     transcricao = " ".join(w["texto"] for w in palavras_trecho)
+    _, c.extra["tema_tags"] = textos.detectar_temas(f"{c.titulo} {transcricao}", cfg.get("temas_em_alta"))
     manual = (cfg.get("ganchos_manuais") or {}).get(c.chave)
     if not manual and analise:
         manual = {"gancho": analise["gancho"], "legenda": analise["legenda"], "titulo": analise["titulo"]}

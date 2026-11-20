@@ -39,7 +39,29 @@ video:
   legendas: true           # transcreve o áudio e queima legenda estilo TikTok
   modelo_whisper: small    # tiny | base | small (small = melhor custo/benefício)
   idioma: pt
-  hashtags: ["#gta6", "#gta", "#gtarp", "#cortes"]
+  hashtags: ["#gta6", "#gtavi", "#gta", "#gtarp", "#cortes", "#rockstargames"]
+
+# Temas em alta (pesquisa vidIQ 18–19/11: o que mais viralizou em cortes de GTA 6 no Brasil).
+# Clipe cujo título/fala bate com um tema sobe na fila e ganha as hashtags do tema.
+temas_em_alta:
+  - nome: bugs
+    palavras: ["bug", "bugou", "glitch", "travou", "injogável"]
+    hashtags: ["#bugsgta6", "#gta6bugs"]
+  - nome: npcs e realismo
+    palavras: ["npc", "realista", "realismo", "detalhe", "geladeira", "cabelo"]
+    hashtags: ["#npcgta6", "#detalhesgta6"]
+  - nome: mapa e lugares
+    palavras: ["mapa", "praia", "vice city", "leonida", "miami", "cidade"]
+    hashtags: ["#vicecity", "#mapagta6"]
+  - nome: polícia e perseguição
+    palavras: ["polícia", "policia", "fuga", "fugir", "preso", "estrela", "perseguição"]
+    hashtags: ["#perseguicao", "#gta6policia"]
+  - nome: carros e aviões
+    palavras: ["carro", "avião", "aviao", "moto", "barco", "helicóptero", "bati", "capotou"]
+    hashtags: ["#carrosgta6"]
+  - nome: códigos e segredos
+    palavras: ["cheat", "código", "codigo", "segredo", "easter egg", "escondido"]
+    hashtags: ["#cheatsgta6", "#easteregg"]
 
 # Clipes que o robô NÃO deve usar (ex.: conteúdo sensual/18+ que derruba conta nova)
 pular:
@@ -82,6 +104,10 @@ streamers:
     onde_autorizou: "autorização direta ao Igor (20/11/2026)"
     editor: false
 
+  # Campos opcionais por streamer:
+  #   idioma: en            -> legenda em inglês (streamer gringo de campanha paga)
+  #   aviso: "Parceria paga"  -> texto obrigatório de campanha (Content Rewards etc.)
+  #   hashtags: ["#loud"]   -> hashtags extras desse streamer
   # Modelo pra novos streamers:
   # - nome: Fulano
   #   plataforma: twitch        # twitch | kick | youtube
