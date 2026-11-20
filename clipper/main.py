@@ -200,12 +200,13 @@ def rodar(teste: bool = False):
                         cfg["video"].get("hashtags", []),
                     )
                     post_id = metricool.id_do_post(resp)
+                    link_post = (resp.get("data") or {}).get("plannerUrl") or notificacao.link_metricool()
                     hora = horario[11:16]
                     notificacao.enviar(
                         f"🎬 Novo corte {'pra aprovar' if modo_aprovacao else 'agendado'} — {hora}",
                         f"{c.streamer}: {txt['gancho']}\n{c.views} views no clipe original",
                         tags=["clapper"],
-                        botoes=[("Ver vídeo", url), ("Abrir Metricool", notificacao.link_metricool())],
+                        botoes=[("Ver vídeo", url), ("Abrir no Metricool", link_post)],
                         prioridade=4 if modo_aprovacao else 3,
                     )
                     print(f"  ✔ {'rascunho criado' if modo_aprovacao else 'agendado'} para {horario}")

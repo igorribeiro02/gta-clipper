@@ -57,6 +57,7 @@ def agendar(video_url: str, quando_local: str, fuso: str, textos: dict, redes: l
     if "tiktok" in redes:
         corpo["tiktokData"] = {
             "privacyOption": tiktok_privacidade,
+            "title": textos["titulo_youtube"][:90],  # o Metricool exige título no TikTok
             "disableComment": False, "disableDuet": False, "disableStitch": False,
             "commercialContentThirdParty": False, "commercialContentOwnBrand": False,
         }
