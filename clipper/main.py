@@ -252,6 +252,14 @@ def rodar(teste: bool = False):
             if not (camp and camp.get("horarios")):
                 horarios = itertools.chain([horario], horarios)  # devolve o horário pro próximo clipe
             continue
+        s_cfg = c.extra.get("cfg_streamer") or {}
+        redes_corte = s_cfg.get("redes") or (camp or {}).get("redes") or cfg["redes"]
+        mes = horario[:7]
+        usados = st.setdefault("posts_mes", {}).get(mes, 0)
+        limite_mes = cfg["postagem"].get("limite_posts_mes")
+        if limite_mes and usados + len(redes_corte) > limite_mes:
+            print(f"Limite do mês ({usados}/{limite_mes} posts no Metricool grátis) — pulando {c.streamer}")
+            continue
         print(f"\n▶ {c.streamer} | {c.views} views | {c.titulo[:60]} -> {horario}")
         try:
             with tempfile.TemporaryDirectory() as pasta:
@@ -275,7 +283,7 @@ def rodar(teste: bool = False):
                             "horario": horario, "video": url, "views_clipe": c.views,
                             "gancho": txt["gancho"], "legenda": txt["legenda"],
                             "titulo": txt["titulo_youtube"], "capa": url_capa, "status": "pronto",
-                            "redes": (camp or {}).get("redes"),
+                            "redes": redes_corte,
                             "campanha": {k: camp.get(k) for k in ("nome", "link", "tag")} if camp else None,
                         })
                         aviso_camp = (f"\n💰 Campanha {camp['nome']}: depois que sair, envie o link em até 30 min!"
@@ -292,6 +300,7 @@ def rodar(teste: bool = False):
                             "post_id": None, "gancho": txt["gancho"], "avisado_publicacao": True,
                         })
                         st["vistos"][c.chave] = time.time()
+                        st["posts_mes"][mes] = usados + len(redes_corte)
                         feitos += 1
                         continue
                     resp = metricool.agendar(
