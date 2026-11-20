@@ -56,9 +56,27 @@ def melhor_trecho(caminho: str, duracao: float, palavras: list[dict], alvo: floa
         if perto:
             inicio = max(min(perto) - 0.3, 0)
     fim = min(inicio + alvo, duracao)
+    fim = fechar_na_frase(palavras, fim, duracao)
     janela = range(int(inicio), int(fim))
     pico = max(janela, key=lambda s: vol[s]) if janela else inicio
     return float(inicio), float(fim), float(pico)
+
+
+def fechar_na_frase(palavras: list[dict], fim: float, duracao: float) -> float:
+    """Move o fim pro final de uma frase (pausa >= 0.5s) perto do fim escolhido."""
+    candidatos = []
+    for a, b in zip(palavras, palavras[1:] + [None]):
+        pausa = (b["inicio"] - a["fim"]) if b else 9
+        if pausa >= 0.5 and fim - 5 <= a["fim"] <= fim + 3:
+            candidatos.append(a["fim"])
+    if candidatos:
+        return min(min(candidatos, key=lambda t: abs(t - fim)) + 0.5, duracao)
+    return fim
+
+
+def picos(caminho: str, n: int = 6) -> list[int]:
+    vol = volume_por_segundo(caminho)
+    return sorted(sorted(range(len(vol)), key=vol.__getitem__, reverse=True)[:n])
 
 
 def deslocar(palavras: list[dict], inicio: float, fim: float) -> list[dict]:

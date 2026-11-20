@@ -22,7 +22,7 @@ from zoneinfo import ZoneInfo
 
 import yaml
 
-from . import destaque, estado, legendas, notificacao, render, textos
+from . import destaque, estado, facecam, ia, legendas, notificacao, render, textos
 from .sources import Candidato, kick, twitch, youtube
 
 FONTES = {"twitch": twitch, "kick": kick, "youtube": youtube}
@@ -122,19 +122,35 @@ def produzir(c: Candidato, cfg: dict, pasta: str) -> tuple[str, dict, str | None
         except Exception as e:
             print(f"  [legenda] falhou: {e}")
 
-    # só o trecho mais forte do clipe
+    # 1) onde está a câmera do streamer (config manual > detecção automática)
+    fc = c.extra.get("facecam")
+    if not fc and v.get("facecam_auto", True):
+        fc = facecam.detectar(bruto, dur_total)
+        print(f"  [facecam] {'achei em ' + str(fc) if fc else 'não achei, usando fundo desfocado'}")
+
+    # 2) trecho + textos: IA (se tiver chave) ou algoritmo de volume/fala
     alvo = min(v.get("duracao_alvo_s", 38), cfg["filtros"]["duracao_max_s"])
-    ini, fim, pico = destaque.melhor_trecho(bruto, dur_total, palavras, alvo)
-    print(f"  [destaque] {ini:.0f}s–{fim:.0f}s de {dur_total:.0f}s (pico em {pico:.0f}s)")
+    analise = ia.analisar(c, palavras, destaque.picos(bruto), dur_total, alvo)
+    if analise:
+        ini, fim = analise["inicio"], analise["fim"]
+        dentro = [p for p in destaque.picos(bruto) if ini <= p < fim]
+        pico = float(dentro[0]) if dentro else (ini + fim) / 2
+    else:
+        ini, fim, pico = destaque.melhor_trecho(bruto, dur_total, palavras, alvo)
+    print(f"  [destaque] {ini:.0f}s–{fim:.0f}s de {dur_total:.0f}s ({'IA' if analise else 'volume+fala'})")
     palavras_trecho = destaque.deslocar(palavras, ini, fim)
     transcricao = " ".join(w["texto"] for w in palavras_trecho)
-    txt = textos.gerar(c, transcricao, v.get("hashtags", []), (cfg.get("ganchos_manuais") or {}).get(c.chave))
+    manual = (cfg.get("ganchos_manuais") or {}).get(c.chave)
+    if not manual and analise:
+        manual = {"gancho": analise["gancho"], "legenda": analise["legenda"], "titulo": analise["titulo"]}
+    txt = textos.gerar(c, transcricao, v.get("hashtags", []), manual)
 
     dur = fim - ini
     ass = legendas.gerar_ass(os.path.join(pasta, "legenda.ass"), dur, txt["gancho"], c.credito,
-                             legendas.agrupar(palavras_trecho))
+                             legendas.agrupar(palavras_trecho), dividido=bool(fc))
     final = os.path.join(pasta, "final.mp4")
-    render.renderizar(bruto, final, ass, c.extra.get("facecam"), dur, inicio=ini)
+    render.renderizar(bruto, final, ass, fc, dur, inicio=ini)
+    c.extra["facecam_usada"] = fc
 
     capa = None
     if v.get("capa", True):
@@ -142,7 +158,7 @@ def produzir(c: Candidato, cfg: dict, pasta: str) -> tuple[str, dict, str | None
             capa = destaque.gerar_capa(
                 bruto, pico, os.path.join(pasta, "capa.jpg"), txt["gancho"], c.streamer, c.credito,
                 os.path.join(pasta, "capa.ass"),
-                lambda a: render._filtro(c.extra.get("facecam"), a, escurecer=True),
+                lambda a: render._filtro(c.extra.get("facecam_usada"), a, escurecer=True),
             )
         except Exception as e:
             print(f"  [capa] falhou: {e}")

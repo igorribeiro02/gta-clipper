@@ -42,7 +42,7 @@ def _fallback(c, hashtags):
 def gerar(c, transcricao: str, hashtags: list[str], manual: dict | None = None) -> dict:
     if manual:  # texto escrito à mão no config.yaml (ganchos_manuais)
         out = _fallback(c, hashtags)
-        out["gancho"] = manual.get("gancho", out["gancho"])[:45]
+        out["gancho"] = manual.get("gancho", out["gancho"])[:60]
         if manual.get("legenda"):
             tag = "#" + re.sub(r"[^a-z0-9]", "", c.canal.lower())
             out["legenda"] = f"{manual['legenda']}\n\n🎥 Créditos: {c.credito}\n{' '.join(hashtags)} {tag}"

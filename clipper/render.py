@@ -14,10 +14,10 @@ def duracao(caminho: str) -> float:
 def _filtro(facecam, ass_path, escurecer=False):
     if facecam:
         x, y, w, h = facecam
-        # câmera em cima (1080x640) + gameplay embaixo (1080x1280)
+        # streamer em cima (1080x768) + gameplay embaixo (1080x1152) — formato dos cortes que mais viralizam
         grafo = (
-            f"[0:v]crop=iw*{w}:ih*{h}:iw*{x}:ih*{y},scale=1080:640:force_original_aspect_ratio=increase,crop=1080:640[cam];"
-            f"[0:v]crop=ih*1080/1280:ih:(iw-ih*1080/1280)/2:0,scale=1080:1280[jogo];"
+            f"[0:v]crop=iw*{w}:ih*{h}:iw*{x}:ih*{y},scale=1080:768:force_original_aspect_ratio=increase,crop=1080:768[cam];"
+            f"[0:v]crop=ih*1080/1152:ih:(iw-ih*1080/1152)/2:0,scale=1080:1152[jogo];"
             f"[cam][jogo]vstack=inputs=2[base]"
         )
     else:

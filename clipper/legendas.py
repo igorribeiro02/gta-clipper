@@ -65,10 +65,12 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
 """
 
 
-def gerar_ass(destino: str, duracao: float, gancho: str, credito: str, blocos: list[dict]) -> str:
+def gerar_ass(destino: str, duracao: float, gancho: str, credito: str, blocos: list[dict],
+              dividido: bool = False) -> str:
     linhas = [CABECALHO]
     if gancho:
-        linhas.append(f"Dialogue: 1,{_t(0)},{_t(duracao)},Gancho,,0,0,0,,{_esc(gancho).upper()}\n")
+        pos = "{\\an5\\pos(540,768)}" if dividido else ""  # na emenda streamer/jogo
+        linhas.append(f"Dialogue: 1,{_t(0)},{_t(duracao)},Gancho,,0,0,0,,{pos}{_esc(gancho).upper()}\n")
     if credito:
         linhas.append(f"Dialogue: 1,{_t(0)},{_t(duracao)},Credito,,0,0,0,,▶ {_esc(credito)}\n")
     for b in blocos:
