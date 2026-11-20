@@ -96,7 +96,12 @@ def situacao(post_id) -> str:
     d = d.get("data", d)
     if d.get("draft"):
         return "rascunho"
-    texto = str(d.get("providers", "")).upper() + str(d.get("status", "")).upper()
+    provs = d.get("providers") or []
+    # "publicado com avisos" (ex.: capa recusada no YouTube) conta como publicado
+    if provs and all(p.get("status") == "PUBLISHED" or "published" in str(p.get("detailedStatus", "")).lower()
+                     for p in provs):
+        return "publicado"
+    texto = str(provs).upper() + str(d.get("status", "")).upper()
     if "ERROR" in texto or "FAIL" in texto:
         return "erro"
     if "PUBLISHED" in texto or "SUCCESS" in texto:
