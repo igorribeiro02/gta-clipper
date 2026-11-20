@@ -14,6 +14,17 @@ MODELOS = [  # formato dos cortes que mais viralizaram: o que aconteceu + live d
     "O {s} viu isso no {j} e não acreditou!!",
 ]
 
+MODELOS_EN = [
+    "Look what happened in {j} live on {s}'s stream!!",
+    "{s} did NOT expect this in {j} and chat lost it!!",
+    "{s} saw this in {j} and couldn't believe it!!",
+]
+PERGUNTAS_EN = [
+    "What would you do here? 👇",
+    "Rate this moment 0-10 👇",
+    "Tag a friend who would do this 😂",
+]
+
 PERGUNTAS = [
     "E você, faria o quê nessa situação? 👇",
     "Já aconteceu isso com você no GTA 6? Comenta 👇",
@@ -49,10 +60,16 @@ def hashtags(c, base: list[str]) -> str:
     return " ".join(out[:12])
 
 
+def _en(c) -> bool:
+    return (c.extra.get("cfg_streamer") or {}).get("idioma", "pt").startswith("en")
+
+
 def descricao(c, frase: str, base_tags: list[str]) -> str:
     s = c.extra.get("cfg_streamer") or {}
-    pergunta = PERGUNTAS[sum(map(ord, c.chave)) % len(PERGUNTAS)]
-    linhas = [frase.strip(), "", pergunta, "", f"🎥 Créditos: {c.credito}"]
+    lista = PERGUNTAS_EN if _en(c) else PERGUNTAS
+    pergunta = lista[sum(map(ord, c.chave)) % len(lista)]
+    credito = s.get("credito_texto") or (f"🎥 Credit: {c.credito}" if _en(c) else f"🎥 Créditos: {c.credito}")
+    linhas = [frase.strip(), "", pergunta, "", credito]
     if s.get("aviso"):  # ex.: campanha paga exige aviso claro
         linhas.append(s["aviso"])
     linhas += ["", hashtags(c, base_tags)]
@@ -62,7 +79,8 @@ def descricao(c, frase: str, base_tags: list[str]) -> str:
 def gerar(c, transcricao: str, base_tags: list[str], manual: dict | None = None) -> dict:
     jogo = c.extra.get("jogo") or "GTA"
     if titulo_ruim(c.titulo):
-        base = MODELOS[sum(map(ord, c.chave)) % len(MODELOS)].format(s=c.streamer, j=jogo)
+        modelos = MODELOS_EN if _en(c) else MODELOS
+        base = modelos[sum(map(ord, c.chave)) % len(modelos)].format(s=c.streamer, j=jogo)
     else:
         base = re.sub(r"\s+", " ", c.titulo).strip()
     out = {

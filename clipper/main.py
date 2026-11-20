@@ -90,7 +90,7 @@ def filtrar_e_ranquear(cands: list[Candidato], cfg: dict, st: dict) -> list[Cand
 
 
 # ---------------------------------------------------------------- horários
-def proximos_horarios(cfg: dict, st: dict, dias: int = 3):
+def proximos_horarios(cfg: dict, st: dict, dias: int = 3, lista: list[str] | None = None):
     p = cfg["postagem"]
     tz = ZoneInfo(cfg["fuso"])
     agora = datetime.now(tz)
@@ -101,7 +101,7 @@ def proximos_horarios(cfg: dict, st: dict, dias: int = 3):
         por_dia[a["horario"][:10]] = por_dia.get(a["horario"][:10], 0) + 1
     for d in range(dias):
         dia = (agora + timedelta(days=d)).date()
-        for hhmm in p["horarios"]:
+        for hhmm in (lista or p["horarios"]):
             h, m = map(int, hhmm.split(":"))
             dt = datetime(dia.year, dia.month, dia.day, h, m, tzinfo=tz)
             chave = dt.strftime("%Y-%m-%dT%H:%M:%S")
@@ -156,7 +156,8 @@ def produzir(c: Candidato, cfg: dict, pasta: str) -> tuple[str, dict, str | None
 
     dur = fim - ini
     ass = legendas.gerar_ass(os.path.join(pasta, "legenda.ass"), dur, txt["gancho"], c.credito,
-                             legendas.agrupar(palavras_trecho), dividido=bool(fc))
+                             legendas.agrupar(palavras_trecho), dividido=bool(fc),
+                             aviso=(c.extra.get("cfg_streamer") or {}).get("aviso_video"))
     final = os.path.join(pasta, "final.mp4")
     render.renderizar(bruto, final, ass, fc, dur, inicio=ini)
     c.extra["facecam_usada"] = fc
@@ -225,12 +226,19 @@ def rodar(teste: bool = False):
     for c in fila:
         if feitos >= limite:
             break
-        horario = next(horarios, None)
-        if horario is None:
-            print("Agenda cheia pelos próximos dias — nada a fazer.")
-            break
+        camp = (c.extra.get("cfg_streamer") or {}).get("campanha")
+        if camp and camp.get("horarios"):  # campanha paga tem horários próprios
+            horario = next(proximos_horarios(cfg, st, lista=camp["horarios"]), None)
+            if horario is None:
+                continue
+        else:
+            horario = next(horarios, None)
+            if horario is None:
+                print("Agenda cheia pelos próximos dias — nada a fazer.")
+                break
         if not cota_streamer_ok(cfg, st, c.streamer, horario):
-            horarios = itertools.chain([horario], horarios)  # devolve o horário pro próximo clipe
+            if not (camp and camp.get("horarios")):
+                horarios = itertools.chain([horario], horarios)  # devolve o horário pro próximo clipe
             continue
         print(f"\n▶ {c.streamer} | {c.views} views | {c.titulo[:60]} -> {horario}")
         try:
@@ -255,11 +263,15 @@ def rodar(teste: bool = False):
                             "horario": horario, "video": url, "views_clipe": c.views,
                             "gancho": txt["gancho"], "legenda": txt["legenda"],
                             "titulo": txt["titulo_youtube"], "capa": url_capa, "status": "pronto",
+                            "redes": (camp or {}).get("redes"),
+                            "campanha": {k: camp.get(k) for k in ("nome", "link", "tag")} if camp else None,
                         })
+                        aviso_camp = (f"\n💰 Campanha {camp['nome']}: depois que sair, envie o link em até 30 min!"
+                                      if camp else "")
                         notificacao.enviar(
                             f"🎬 Corte pronto ({c.streamer})",
-                            f"{txt['gancho']}\nSugestão de horário: {horario[11:16]}. Peça pro Claude agendar.",
-                            tags=["clapper"], botoes=[("Ver vídeo", url)],
+                            f"{txt['gancho']}\nSugestão de horário: {horario[11:16]}.{aviso_camp}",
+                            tags=["clapper"], botoes=[("Ver vídeo", url)] + ([("Campanha", camp["link"])] if camp and camp.get("link") else []),
                         )
                         print(f"  ✔ corte pronto na fila: {url}")
                         st["agendados"].append({

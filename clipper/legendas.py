@@ -66,8 +66,10 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
 
 
 def gerar_ass(destino: str, duracao: float, gancho: str, credito: str, blocos: list[dict],
-              dividido: bool = False) -> str:
+              dividido: bool = False, aviso: str | None = None) -> str:
     linhas = [CABECALHO]
+    if aviso:  # aviso de publicidade nos 3 primeiros segundos (exigência das campanhas pagas)
+        linhas.append(f"Dialogue: 2,{_t(0)},{_t(3)},Credito,,0,0,0,,{{\\an7\\pos(40,40)}}{_esc(aviso)}\n")
     if gancho:
         pos = "{\\an5\\pos(540,768)}" if dividido else ""  # na emenda streamer/jogo
         linhas.append(f"Dialogue: 1,{_t(0)},{_t(duracao)},Gancho,,0,0,0,,{pos}{_esc(gancho).upper()}\n")
