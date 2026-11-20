@@ -7,12 +7,11 @@ import re
 import requests
 
 
-MODELOS = [
-    "O {s} não esperava isso no {j}",
-    "Olha o que aconteceu na live do {s}",
-    "O {s} perdeu a linha no {j}",
-    "Esse momento do {s} no {j}",
-    "O chat do {s} não acreditou nisso",
+MODELOS = [  # formato dos cortes que mais viralizaram: o que aconteceu + live do X + reação
+    "Olha o que aconteceu no {j} no meio da live do {s}!!",
+    "O {s} não esperava isso no {j} e o chat foi à loucura!!",
+    "Isso aconteceu no {j} ao vivo e o {s} ficou sem reação!!",
+    "O {s} viu isso no {j} e não acreditou!!",
 ]
 
 
@@ -33,7 +32,7 @@ def _fallback(c, hashtags):
         base = re.sub(r"\s+", " ", c.titulo).strip()
     tag_streamer = "#" + re.sub(r"[^a-z0-9]", "", c.canal.lower())
     return {
-        "gancho": base[:45],
+        "gancho": base[:115],
         "legenda": f"{base} 😂\n\n🎥 Créditos: {c.credito}\n{' '.join(hashtags)} {tag_streamer}",
         "titulo_youtube": f"{base[:80]} | {c.streamer}",
     }
@@ -42,7 +41,7 @@ def _fallback(c, hashtags):
 def gerar(c, transcricao: str, hashtags: list[str], manual: dict | None = None) -> dict:
     if manual:  # texto escrito à mão no config.yaml (ganchos_manuais)
         out = _fallback(c, hashtags)
-        out["gancho"] = manual.get("gancho", out["gancho"])[:60]
+        out["gancho"] = manual.get("gancho", out["gancho"])[:115]
         if manual.get("legenda"):
             tag = "#" + re.sub(r"[^a-z0-9]", "", c.canal.lower())
             out["legenda"] = f"{manual['legenda']}\n\n🎥 Créditos: {c.credito}\n{' '.join(hashtags)} {tag}"

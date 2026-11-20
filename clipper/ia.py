@@ -43,7 +43,7 @@ Escolha UM trecho entre 15 e {int(alvo) + 7} segundos que:
 
 Responda SÓ com JSON:
 {{"inicio": segundos, "fim": segundos,
- "gancho": "frase em CAIXA ALTA de até 60 caracteres: NOME DO STREAMER + o que aconteceu (ex.: 'CORINGA ACHOU O PRIMEIRO BUG DO GTA 6')",
+ "gancho": "frase narrativa em CAIXA ALTA de 60 a 110 caracteres, no formato O QUE ACONTECEU + NO MEIO DA LIVE DO STREAMER + A REAÇÃO, terminando com !! (ex.: 'UM AVIÃO CAIU DO NADA NO GTA 6 NO MEIO DA LIVE DO CORINGA E ELE FICOU SEM ACREDITAR!!')",
  "legenda": "legenda do post, até 150 caracteres, 1-2 emojis, sem hashtags",
  "titulo": "título do Short até 80 caracteres, com o nome do streamer e do jogo"}}
 Não invente nada que não esteja na transcrição ou no título do clipe."""
@@ -62,7 +62,7 @@ Não invente nada que não esteja na transcrição ou no título do clipe."""
         if not (0 <= ini < fim <= dur + 0.5 and 8 <= fim - ini <= alvo + 15):
             print(f"  [ia] trecho inválido {ini}-{fim}, usando automático")
             return None
-        return {"inicio": ini, "fim": min(fim + 0.4, dur), "gancho": d["gancho"][:60],
+        return {"inicio": ini, "fim": min(fim + 0.4, dur), "gancho": d["gancho"][:115],
                 "legenda": d["legenda"], "titulo": d["titulo"][:95]}
     except Exception as e:
         print(f"  [ia] falhou ({e}), usando automático")

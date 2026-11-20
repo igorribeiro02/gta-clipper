@@ -57,7 +57,7 @@ ScaledBorderAndShadow: yes
 [V4+ Styles]
 Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
 Style: Legenda,DejaVu Sans,80,&H00FFFFFF,&H00FFFFFF,&H00000000,&H64000000,1,0,0,0,100,100,0,0,1,7,2,2,60,60,560,1
-Style: Gancho,DejaVu Sans,62,&H00FFFFFF,&H00FFFFFF,&H00000000,&H00000000,1,0,0,0,100,100,0,0,3,18,0,8,70,70,150,1
+Style: Gancho,DejaVu Sans,54,&H00FFFFFF,&H00FFFFFF,&H00000000,&H00000000,1,0,0,0,100,100,0,0,3,18,0,8,70,70,150,1
 Style: Credito,DejaVu Sans,38,&H30FFFFFF,&H30FFFFFF,&H00000000,&H00000000,1,0,0,0,100,100,0,0,1,3,0,2,60,60,110,1
 
 [Events]
