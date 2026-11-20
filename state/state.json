@@ -1,4 +1,42 @@
 {
- "vistos": {},
- "agendados": []
+ "vistos": {
+  "kick:clip_01M7SNVFD8NQGRGY98AKM6W4SG": 1795171868.7706058,
+  "kick:clip_01M7SFMAS45A904V70KC8FMSSV": 1795172013.8333044,
+  "kick:clip_01M7SNV030669FZM5KDVKCXXJ2": 1795172085.8902025
+ },
+ "agendados": [
+  {
+   "chave": "kick:clip_01M7SNVFD8NQGRGY98AKM6W4SG",
+   "streamer": "Coringa",
+   "horario": "2026-11-20T08:30:00",
+   "vod_id": "138701863",
+   "vod_offset": null,
+   "ts": 1795171868.7706034,
+   "post_id": null,
+   "gancho": "Kkkkkkkk",
+   "avisado_publicacao": true
+  },
+  {
+   "chave": "kick:clip_01M7SFMAS45A904V70KC8FMSSV",
+   "streamer": "Coringa",
+   "horario": "2026-11-20T11:30:00",
+   "vod_id": "138701863",
+   "vod_offset": null,
+   "ts": 1795172013.8333015,
+   "post_id": null,
+   "gancho": "FDSF",
+   "avisado_publicacao": true
+  },
+  {
+   "chave": "kick:clip_01M7SNV030669FZM5KDVKCXXJ2",
+   "streamer": "Coringa",
+   "horario": "2026-11-20T13:00:00",
+   "vod_id": "138701863",
+   "vod_offset": null,
+   "ts": 1795172085.8902004,
+   "post_id": null,
+   "gancho": "Q ISSO",
+   "avisado_publicacao": true
+  }
+ ]
 }
