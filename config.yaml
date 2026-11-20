@@ -34,6 +34,7 @@ filtros:
 video:
   duracao_alvo_s: 38       # corta só o trecho mais forte do clipe (volume + fala)
   facecam_auto: true       # acha a câmera do streamer e faz tela dividida (streamer em cima)
+  capa_estilo: arte        # arte = capa original desenhada (sem copyright) | quadro = frame da live
   capa: true               # gera capa com o gancho gigante no quadro de pico
   legendas: true           # transcreve o áudio e queima legenda estilo TikTok
   modelo_whisper: small    # tiny | base | small (small = melhor custo/benefício)

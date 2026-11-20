@@ -153,7 +153,13 @@ def produzir(c: Candidato, cfg: dict, pasta: str) -> tuple[str, dict, str | None
     c.extra["facecam_usada"] = fc
 
     capa = None
-    if v.get("capa", True):
+    if v.get("capa", True) and v.get("capa_estilo", "arte") == "arte":
+        try:  # arte própria, sem quadro da live nem imagem do jogo
+            from . import capa_arte
+            capa = capa_arte.gerar(os.path.join(pasta, "capa.jpg"), txt["gancho"], c.streamer, c.credito, c.chave)
+        except Exception as e:
+            print(f"  [capa] falhou: {e}")
+    elif v.get("capa", True):
         try:
             capa = destaque.gerar_capa(
                 bruto, pico, os.path.join(pasta, "capa.jpg"), txt["gancho"], c.streamer, c.credito,
