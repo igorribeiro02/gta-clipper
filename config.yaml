@@ -1,0 +1,84 @@
+# ==========================================================
+#  GTA CLIPPER — configuração
+#  Edite este arquivo direto no GitHub (ícone de lápis).
+# ==========================================================
+
+# "aprovacao"  -> cada corte vai pro Metricool como RASCUNHO com data/hora.
+#                 Você revisa no app do Metricool e aprova.
+# "automatico" -> cada corte é agendado e sai sozinho no horário.
+modo: aprovacao
+
+fuso: America/Sao_Paulo
+
+# Redes onde cada corte será postado (via Metricool)
+redes: [tiktok, instagram, youtube]
+
+# Horários fixos de postagem ao longo do dia (cada corte ocupa um horário)
+postagem:
+  horarios: ["08:30", "11:30", "13:00", "16:00", "18:30", "20:00", "21:30", "23:00"]
+  max_por_dia: 8
+  max_por_streamer_por_dia: 3
+  max_cortes_por_execucao: 3      # quantos cortes renderizar a cada rodada (30 min)
+  antecedencia_minima_min: 20     # não agenda nada pra daqui a menos de X minutos
+  tiktok_privacidade: PUBLIC_TO_EVERYONE
+
+# Filtros de qualidade
+filtros:
+  janela_horas: 8          # só considera clipes criados nas últimas X horas
+  views_minimas_twitch: 30
+  views_minimas_kick: 30
+  duracao_min_s: 10
+  duracao_max_s: 75
+
+# Estilo do vídeo
+video:
+  legendas: true           # transcreve o áudio e queima legenda estilo TikTok
+  modelo_whisper: small    # tiny | base | small (small = melhor custo/benefício)
+  idioma: pt
+  hashtags: ["#gta", "#gtarp", "#gtav", "#cortes"]
+
+# ----------------------------------------------------------
+# Streamers. O robô SÓ clipa quem tiver "autorizado: true".
+#   autorizado:      true = autorizou por mensagem OU libera cortes
+#                    publicamente (bio, painel da Twitch, Discord)
+#   onde_autorizou:  onde está a prova (guarde o print!)
+#   plataforma: twitch | kick | youtube
+#   canal:      login da Twitch, slug da Kick ou @handle do YouTube
+#   facecam:    opcional. Posição da câmera na tela, em frações (0 a 1):
+#               [x, y, largura, altura]. Ex.: câmera no canto inferior
+#               direito ocupando 25% x 30% -> [0.75, 0.70, 0.25, 0.30]
+#               Sem facecam = vídeo centralizado com fundo desfocado.
+#   editor:     true se o streamer te colocou como editor na Twitch
+#               (libera o download oficial pela API)
+# ----------------------------------------------------------
+streamers:
+  # Os dois abaixo têm canais OFICIAIS de cortes (Clipadas do Coringa / Cortes do
+  # Davy Jones) e não achei autorização pública pra terceiros. Ficam desligados
+  # até você conseguir a autorização. Aí é só trocar pra "autorizado: true".
+  - nome: Coringa
+    plataforma: kick
+    canal: coringa
+    autorizado: false
+    onde_autorizou: ""
+
+  - nome: Coringa (Twitch)
+    plataforma: twitch
+    canal: loud_coringa
+    autorizado: false
+    onde_autorizou: ""
+    editor: false
+
+  - nome: Davy Jones
+    plataforma: twitch
+    canal: davyjones
+    autorizado: false
+    onde_autorizou: ""
+    editor: false
+
+  # Modelo pra novos streamers:
+  # - nome: Fulano
+  #   plataforma: twitch        # twitch | kick | youtube
+  #   canal: fulano
+  #   autorizado: true
+  #   onde_autorizou: "painel da Twitch: cortes liberados (print salvo 20/11)"
+  #   facecam: [0.75, 0.70, 0.25, 0.30]
