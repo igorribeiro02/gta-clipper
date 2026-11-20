@@ -6,7 +6,7 @@
 # "aprovacao"  -> cada corte vai pro Metricool como RASCUNHO com data/hora.
 #                 Você revisa no app do Metricool e aprova.
 # "automatico" -> cada corte é agendado e sai sozinho no horário.
-modo: aprovacao
+modo: automatico
 
 fuso: America/Sao_Paulo
 
