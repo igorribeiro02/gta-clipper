@@ -35,7 +35,7 @@ def normalizar_midia(url_publica: str) -> str:
 
 
 def agendar(video_url: str, quando_local: str, fuso: str, textos: dict, redes: list[str],
-            rascunho: bool, tiktok_privacidade: str, tags: list[str]) -> dict:
+            rascunho: bool, tiktok_privacidade: str, tags: list[str], capa_url: str | None = None) -> dict:
     h, p = _auth()
     midia = normalizar_midia(video_url)
     corpo = {
@@ -52,6 +52,8 @@ def agendar(video_url: str, quando_local: str, fuso: str, textos: dict, redes: l
         "hasNotReadNotes": False,
         "smartLinkData": {"ids": []},
     }
+    if capa_url:
+        corpo["videoThumbnailUrl"] = capa_url
     if "instagram" in redes:
         corpo["instagramData"] = {"type": "REEL", "showReelOnFeed": True}
     if "tiktok" in redes:

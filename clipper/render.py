@@ -11,7 +11,7 @@ def duracao(caminho: str) -> float:
     return float(json.loads(out)["format"]["duration"])
 
 
-def _filtro(facecam, ass_path):
+def _filtro(facecam, ass_path, escurecer=False):
     if facecam:
         x, y, w, h = facecam
         # câmera em cima (1080x640) + gameplay embaixo (1080x1280)
@@ -28,16 +28,22 @@ def _filtro(facecam, ass_path):
             "[b]scale=1080:-2[frente];"
             "[fundo][frente]overlay=(W-w)/2:(H-h)/2[base]"
         )
-    if ass_path:
-        grafo += f";[base]ass={ass_path}[v]"
+    if escurecer:
+        grafo += ";[base]eq=brightness=-0.12:saturation=1.2[base2]"
+        base = "base2"
     else:
-        grafo += ";[base]null[v]"
+        base = "base"
+    if ass_path:
+        grafo += f";[{base}]ass={ass_path}[v]"
+    else:
+        grafo += f";[{base}]null[v]"
     return grafo
 
 
-def renderizar(entrada: str, saida: str, ass_path: str | None, facecam=None, dur_max: float = 75) -> str:
+def renderizar(entrada: str, saida: str, ass_path: str | None, facecam=None, dur_max: float = 75,
+               inicio: float = 0.0) -> str:
     cmd = [
-        "ffmpeg", "-y", "-loglevel", "error", "-i", entrada, "-t", str(dur_max),
+        "ffmpeg", "-y", "-loglevel", "error", "-ss", f"{inicio:.2f}", "-i", entrada, "-t", f"{dur_max:.2f}",
         "-filter_complex", _filtro(facecam, ass_path),
         "-map", "[v]", "-map", "0:a?",
         "-c:v", "libx264", "-preset", "veryfast", "-crf", "21", "-pix_fmt", "yuv420p", "-r", "30",

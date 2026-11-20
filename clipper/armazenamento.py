@@ -31,7 +31,7 @@ def _subir_r2(caminho: str, nome: str) -> str:
         aws_secret_access_key=os.environ["R2_SECRET_ACCESS_KEY"],
         region_name="auto",
     )
-    s3.upload_file(caminho, os.environ["R2_BUCKET"], nome, ExtraArgs={"ContentType": "video/mp4"})
+    s3.upload_file(caminho, os.environ["R2_BUCKET"], nome, ExtraArgs={"ContentType": "image/jpeg" if nome.endswith(".jpg") else "video/mp4"})
     return f"{os.environ['R2_PUBLIC_BASE_URL'].rstrip('/')}/{nome}"
 
 
@@ -59,7 +59,7 @@ def _preparar_pasta():
 
 def _limpar_antigos():
     limite = time.time() - DIAS_GUARDAR * 86400
-    for p in PASTA.rglob("*.mp4"):
+    for p in [*PASTA.rglob("*.mp4"), *PASTA.rglob("*.jpg")]:
         if p.stat().st_mtime < limite:
             p.unlink()
 

@@ -22,7 +22,7 @@ from zoneinfo import ZoneInfo
 
 import yaml
 
-from . import estado, legendas, notificacao, render, textos
+from . import destaque, estado, legendas, notificacao, render, textos
 from .sources import Candidato, kick, twitch, youtube
 
 FONTES = {"twitch": twitch, "kick": kick, "youtube": youtube}
@@ -109,11 +109,11 @@ def cota_streamer_ok(cfg, st, streamer, horario) -> bool:
 
 
 # ---------------------------------------------------------------- produção
-def produzir(c: Candidato, cfg: dict, pasta: str) -> tuple[str, dict]:
+def produzir(c: Candidato, cfg: dict, pasta: str) -> tuple[str, dict, str | None]:
     v = cfg["video"]
     bruto = os.path.join(pasta, "bruto.mp4")
     FONTES[c.plataforma].baixar(c, bruto)
-    dur = min(render.duracao(bruto), cfg["filtros"]["duracao_max_s"])
+    dur_total = render.duracao(bruto)
 
     palavras = []
     if v.get("legendas", True):
@@ -121,13 +121,32 @@ def produzir(c: Candidato, cfg: dict, pasta: str) -> tuple[str, dict]:
             palavras = legendas.transcrever(bruto, v.get("modelo_whisper", "small"), v.get("idioma", "pt"))
         except Exception as e:
             print(f"  [legenda] falhou: {e}")
-    transcricao = " ".join(w["texto"] for w in palavras)
+
+    # só o trecho mais forte do clipe
+    alvo = min(v.get("duracao_alvo_s", 38), cfg["filtros"]["duracao_max_s"])
+    ini, fim, pico = destaque.melhor_trecho(bruto, dur_total, palavras, alvo)
+    print(f"  [destaque] {ini:.0f}s–{fim:.0f}s de {dur_total:.0f}s (pico em {pico:.0f}s)")
+    palavras_trecho = destaque.deslocar(palavras, ini, fim)
+    transcricao = " ".join(w["texto"] for w in palavras_trecho)
     txt = textos.gerar(c, transcricao, v.get("hashtags", []), (cfg.get("ganchos_manuais") or {}).get(c.chave))
 
-    ass = legendas.gerar_ass(os.path.join(pasta, "legenda.ass"), dur, txt["gancho"], c.credito, legendas.agrupar(palavras))
+    dur = fim - ini
+    ass = legendas.gerar_ass(os.path.join(pasta, "legenda.ass"), dur, txt["gancho"], c.credito,
+                             legendas.agrupar(palavras_trecho))
     final = os.path.join(pasta, "final.mp4")
-    render.renderizar(bruto, final, ass, c.extra.get("facecam"), dur)
-    return final, txt
+    render.renderizar(bruto, final, ass, c.extra.get("facecam"), dur, inicio=ini)
+
+    capa = None
+    if v.get("capa", True):
+        try:
+            capa = destaque.gerar_capa(
+                bruto, pico, os.path.join(pasta, "capa.jpg"), txt["gancho"], c.streamer, c.credito,
+                os.path.join(pasta, "capa.ass"),
+                lambda a: render._filtro(c.extra.get("facecam"), a, escurecer=True),
+            )
+        except Exception as e:
+            print(f"  [capa] falhou: {e}")
+    return final, txt, capa
 
 
 def verificar_publicacoes(cfg: dict, st: dict) -> None:
@@ -185,23 +204,26 @@ def rodar(teste: bool = False):
         print(f"\n▶ {c.streamer} | {c.views} views | {c.titulo[:60]} -> {horario}")
         try:
             with tempfile.TemporaryDirectory() as pasta:
-                final, txt = produzir(c, cfg, pasta)
+                final, txt, capa = produzir(c, cfg, pasta)
                 if teste:
                     Path("saida").mkdir(exist_ok=True)
                     destino = Path("saida") / f"{c.chave.replace(':', '_')}.mp4"
                     os.replace(final, destino)
+                    if capa:
+                        os.replace(capa, str(destino).replace(".mp4", "_capa.jpg"))
                     print(f"  [teste] salvo em {destino}\n  gancho: {txt['gancho']}\n  legenda: {txt['legenda']}")
                 else:
                     from . import armazenamento, metricool
                     nome = f"cortes/{horario[:10]}/{c.chave.replace(':', '_')}.mp4"
                     url = armazenamento.subir(final, nome)
+                    url_capa = armazenamento.subir(capa, nome.replace(".mp4", ".jpg")) if capa else None
                     if not os.environ.get("METRICOOL_TOKEN"):
                         # sem API do Metricool: deixa na fila pro Claude agendar pelo conector
                         armazenamento.registrar_na_fila({
                             "chave": c.chave, "streamer": c.streamer, "credito": c.credito,
                             "horario": horario, "video": url, "views_clipe": c.views,
                             "gancho": txt["gancho"], "legenda": txt["legenda"],
-                            "titulo": txt["titulo_youtube"], "status": "pronto",
+                            "titulo": txt["titulo_youtube"], "capa": url_capa, "status": "pronto",
                         })
                         notificacao.enviar(
                             f"🎬 Corte pronto ({c.streamer})",
@@ -220,7 +242,7 @@ def rodar(teste: bool = False):
                     resp = metricool.agendar(
                         url, horario, cfg["fuso"], txt, cfg["redes"], modo_aprovacao,
                         cfg["postagem"].get("tiktok_privacidade", "PUBLIC_TO_EVERYONE"),
-                        cfg["video"].get("hashtags", []),
+                        cfg["video"].get("hashtags", []), capa_url=url_capa,
                     )
                     post_id = metricool.id_do_post(resp)
                     link_post = (resp.get("data") or {}).get("plannerUrl") or notificacao.link_metricool()
