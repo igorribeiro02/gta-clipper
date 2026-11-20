@@ -194,6 +194,28 @@ def rodar(teste: bool = False):
                     from . import armazenamento, metricool
                     nome = f"cortes/{horario[:10]}/{c.chave.replace(':', '_')}.mp4"
                     url = armazenamento.subir(final, nome)
+                    if not os.environ.get("METRICOOL_TOKEN"):
+                        # sem API do Metricool: deixa na fila pro Claude agendar pelo conector
+                        armazenamento.registrar_na_fila({
+                            "chave": c.chave, "streamer": c.streamer, "credito": c.credito,
+                            "horario": horario, "video": url, "views_clipe": c.views,
+                            "gancho": txt["gancho"], "legenda": txt["legenda"],
+                            "titulo": txt["titulo_youtube"], "status": "pronto",
+                        })
+                        notificacao.enviar(
+                            f"🎬 Corte pronto ({c.streamer})",
+                            f"{txt['gancho']}\nSugestão de horário: {horario[11:16]}. Peça pro Claude agendar.",
+                            tags=["clapper"], botoes=[("Ver vídeo", url)],
+                        )
+                        print(f"  ✔ corte pronto na fila: {url}")
+                        st["agendados"].append({
+                            "chave": c.chave, "streamer": c.streamer, "horario": horario,
+                            "vod_id": c.vod_id, "vod_offset": c.vod_offset, "ts": time.time(),
+                            "post_id": None, "gancho": txt["gancho"], "avisado_publicacao": True,
+                        })
+                        st["vistos"][c.chave] = time.time()
+                        feitos += 1
+                        continue
                     resp = metricool.agendar(
                         url, horario, cfg["fuso"], txt, cfg["redes"], modo_aprovacao,
                         cfg["postagem"].get("tiktok_privacidade", "PUBLIC_TO_EVERYONE"),

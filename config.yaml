@@ -52,27 +52,25 @@ video:
 #               (libera o download oficial pela API)
 # ----------------------------------------------------------
 streamers:
-  # Os dois abaixo têm canais OFICIAIS de cortes (Clipadas do Coringa / Cortes do
-  # Davy Jones) e não achei autorização pública pra terceiros. Ficam desligados
-  # até você conseguir a autorização. Aí é só trocar pra "autorizado: true".
+  # Autorização informada pelo Igor em 20/11/2026 — guarde os prints!
   - nome: Coringa
     plataforma: kick
     canal: coringa
-    autorizado: false
-    onde_autorizou: ""
+    autorizado: true
+    onde_autorizou: "autorização direta ao Igor (20/11/2026)"
 
   - nome: Coringa (Twitch)
     plataforma: twitch
     canal: loud_coringa
-    autorizado: false
-    onde_autorizou: ""
+    autorizado: true
+    onde_autorizou: "autorização direta ao Igor (20/11/2026)"
     editor: false
 
   - nome: Davy Jones
     plataforma: twitch
     canal: davyjones
-    autorizado: false
-    onde_autorizou: ""
+    autorizado: true
+    onde_autorizou: "autorização direta ao Igor (20/11/2026)"
     editor: false
 
   # Modelo pra novos streamers:
