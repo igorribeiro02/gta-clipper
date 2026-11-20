@@ -7,8 +7,30 @@ import re
 import requests
 
 
+MODELOS = [
+    "O {s} não esperava isso no {j}",
+    "Olha o que aconteceu na live do {s}",
+    "O {s} perdeu a linha no {j}",
+    "Esse momento do {s} no {j}",
+    "O chat do {s} não acreditou nisso",
+]
+
+
+def titulo_ruim(t: str) -> bool:
+    """Título de clipe feito por viewer costuma ser lixo: 'kkkkk', 'FDSF', 'Q ISSO'."""
+    letras = re.sub(r"[^a-zA-ZÀ-ÿ]", "", t or "")
+    if len(letras) < 8 or len(t.split()) < 3:
+        return True
+    return len(set(letras.lower())) <= 3
+
+
 def _fallback(c, hashtags):
-    base = re.sub(r"\s+", " ", c.titulo or "").strip() or f"Momento insano do {c.streamer} no GTA RP"
+    jogo = c.extra.get("jogo") or "GTA"
+    if titulo_ruim(c.titulo):
+        modelo = MODELOS[sum(map(ord, c.chave)) % len(MODELOS)]
+        base = modelo.format(s=c.streamer, j=jogo)
+    else:
+        base = re.sub(r"\s+", " ", c.titulo).strip()
     tag_streamer = "#" + re.sub(r"[^a-z0-9]", "", c.canal.lower())
     return {
         "gancho": base[:45],
@@ -17,7 +39,15 @@ def _fallback(c, hashtags):
     }
 
 
-def gerar(c, transcricao: str, hashtags: list[str]) -> dict:
+def gerar(c, transcricao: str, hashtags: list[str], manual: dict | None = None) -> dict:
+    if manual:  # texto escrito à mão no config.yaml (ganchos_manuais)
+        out = _fallback(c, hashtags)
+        out["gancho"] = manual.get("gancho", out["gancho"])[:45]
+        if manual.get("legenda"):
+            tag = "#" + re.sub(r"[^a-z0-9]", "", c.canal.lower())
+            out["legenda"] = f"{manual['legenda']}\n\n🎥 Créditos: {c.credito}\n{' '.join(hashtags)} {tag}"
+        out["titulo_youtube"] = manual.get("titulo", out["titulo_youtube"])[:95]
+        return out
     chave = os.environ.get("ANTHROPIC_API_KEY")
     if not chave:
         return _fallback(c, hashtags)

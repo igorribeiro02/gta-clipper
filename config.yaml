@@ -37,6 +37,18 @@ video:
   idioma: pt
   hashtags: ["#gta6", "#gta", "#gtarp", "#cortes"]
 
+# Clipes que o robô NÃO deve usar (ex.: conteúdo sensual/18+ que derruba conta nova)
+pular:
+  - "kick:clip_01M7SNVFD8NQGRGY98AKM6W4SG"
+  - "kick:clip_01M7SNV030669FZM5KDVKCXXJ2"
+
+# Textos escritos à mão para um clipe específico (sobrescreve o automático)
+ganchos_manuais:
+  "kick:clip_01M7SFMAS45A904V70KC8FMSSV":
+    gancho: "O COMEÇO DO GTA 6 COM O CORINGA"
+    legenda: "O Jason acordou e só queria um copo d'água 😂 O Coringa já começou o GTA 6 assim"
+    titulo: "O começo do GTA 6 com o Coringa 😂 #shorts"
+
 # ----------------------------------------------------------
 # Streamers. O robô SÓ clipa quem tiver "autorizado: true".
 #   autorizado:      true = autorizou por mensagem OU libera cortes

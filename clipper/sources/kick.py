@@ -56,7 +56,8 @@ def buscar(streamer: dict, janela_horas: int, views_minimas: int) -> list[Candid
                 duracao=float(c.get("duration") or 30),
                 credito=f"kick.com/{slug}",
                 vod_id=str(c.get("livestream_id") or "") or None,
-                extra={"video_url": c.get("video_url") or c.get("clip_url")},
+                extra={"video_url": c.get("video_url") or c.get("clip_url"),
+                       "jogo": "GTA 6" if "VI" in str((c.get("category") or {}).get("name", "")) else "GTA"},
             )
         )
     return out

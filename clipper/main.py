@@ -63,9 +63,10 @@ def mesmo_momento(a_vod, a_off, b_vod, b_off, tolerancia=45) -> bool:
 def filtrar_e_ranquear(cands: list[Candidato], cfg: dict, st: dict) -> list[Candidato]:
     f = cfg["filtros"]
     agora = datetime.now(timezone.utc)
+    pular = set(cfg.get("pular") or [])
     ok = [
         c for c in cands
-        if c.chave not in st["vistos"] and f["duracao_min_s"] <= c.duracao <= f["duracao_max_s"] + 30
+        if c.chave not in st["vistos"] and c.chave not in pular and f["duracao_min_s"] <= c.duracao <= f["duracao_max_s"] + 30
     ]
     # o mesmo lance costuma ser clipado por várias pessoas: fica só o mais visto
     ok.sort(key=lambda c: c.views, reverse=True)
@@ -121,7 +122,7 @@ def produzir(c: Candidato, cfg: dict, pasta: str) -> tuple[str, dict]:
         except Exception as e:
             print(f"  [legenda] falhou: {e}")
     transcricao = " ".join(w["texto"] for w in palavras)
-    txt = textos.gerar(c, transcricao, v.get("hashtags", []))
+    txt = textos.gerar(c, transcricao, v.get("hashtags", []), (cfg.get("ganchos_manuais") or {}).get(c.chave))
 
     ass = legendas.gerar_ass(os.path.join(pasta, "legenda.ass"), dur, txt["gancho"], c.credito, legendas.agrupar(palavras))
     final = os.path.join(pasta, "final.mp4")
