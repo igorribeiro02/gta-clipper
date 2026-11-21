@@ -14,7 +14,9 @@
   "kick:clip_01M7V48HW62RWAZHAMYJFTVHY9": 1795225889.6827943,
   "kick:clip_01M7XAN6B2RJ5H3G8FX5S3ZYMM": 1795297837.1124704,
   "kick:clip_01M7XW8N1G9TTF698X70GZYKWR": 1795297871.7392654,
-  "kick:clip_01M7XBKAAN73WQDV4T4RQDR29B": 1795297969.1979282
+  "kick:clip_01M7XBKAAN73WQDV4T4RQDR29B": 1795297969.1979282,
+  "kick:clip_01M7XEXHRCSP7FD9BKV608DPA4": 1795298272.8606312,
+  "kick:clip_01M7XB37569GHGJ2S5QBKCT3KB": 1795298332.1163728
  },
  "agendados": [
   {
@@ -104,9 +106,31 @@
    "post_id": null,
    "gancho": "",
    "avisado_publicacao": true
+  },
+  {
+   "chave": "kick:clip_01M7XEXHRCSP7FD9BKV608DPA4",
+   "streamer": "Dasgas Dom",
+   "horario": "2026-11-22T10:20:00",
+   "vod_id": "139176481",
+   "vod_offset": null,
+   "ts": 1795298272.8606298,
+   "post_id": null,
+   "gancho": "Bro's girlfriend won't be happy about this",
+   "avisado_publicacao": true
+  },
+  {
+   "chave": "kick:clip_01M7XB37569GHGJ2S5QBKCT3KB",
+   "streamer": "Coringa",
+   "horario": "2026-11-22T08:30:00",
+   "vod_id": "139130217",
+   "vod_offset": null,
+   "ts": 1795298332.116371,
+   "post_id": null,
+   "gancho": "O Coringa viu isso no GTA 6 e não acreditou!!",
+   "avisado_publicacao": true
   }
  ],
  "posts_mes": {
-  "2026-11": 13
+  "2026-11": 18
  }
 }
