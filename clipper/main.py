@@ -84,7 +84,8 @@ def filtrar_e_ranquear(cands: list[Candidato], cfg: dict, st: dict) -> list[Cand
 
     def nota(c):
         n, _ = textos.detectar_temas(c.titulo, temas)
-        return c.views / (c.idade_horas(agora) + 2) ** 1.3 * (1 + 0.6 * n)
+        paga = 3 if (c.extra.get("cfg_streamer") or {}).get("campanha") else 1  # campanha paga primeiro
+        return c.views / (c.idade_horas(agora) + 2) ** 1.3 * (1 + 0.6 * n) * paga
 
     unicos.sort(key=nota, reverse=True)
     return unicos
@@ -172,6 +173,12 @@ def produzir(c: Candidato, cfg: dict, pasta: str) -> tuple[str, dict, str | None
                              aviso=(c.extra.get("cfg_streamer") or {}).get("aviso_video"))
     final = os.path.join(pasta, "final.mp4")
     render.renderizar(bruto, final, ass, fc, dur, inicio=ini)
+    if v.get("filtro_nudez", True):
+        from . import nudez
+        bloquear, info = nudez.analisar(final, bool(fc))
+        print(f"  [nudez] {info}")
+        if bloquear:
+            raise ConteudoBloqueado(f"nudez/cena sexual detectada {info}")
     c.extra["facecam_usada"] = fc
 
     capa = None

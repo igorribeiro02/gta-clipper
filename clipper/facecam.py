@@ -55,6 +55,9 @@ def detectar(caminho: str, dur: float):
     if votos < max(3, len(quadros) // 2):
         return None
     x, y, w, h = melhor
+    # webcam fica no canto/lateral e o rosto nela é pequeno; rosto grande no meio = personagem do jogo
+    if w > 0.07 or 0.33 < x + w / 2 < 0.67:
+        return None
     # caixa da webcam ~ 5x a largura do rosto, proporção 16:9 (em pixels)
     cw = min(w * 5.0, 0.45)
     ch = min(cw * (W / H) * 9 / 16, 0.6)

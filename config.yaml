@@ -35,6 +35,7 @@ filtros:
 video:
   duracao_alvo_s: 38       # corta só o trecho mais forte do clipe (volume + fala)
   facecam_auto: true       # acha a câmera do streamer e faz tela dividida (streamer em cima)
+  filtro_nudez: true       # pula clipes com nudez/cena sexual (strip club, praia de nudismo do GTA 6)
   capa_estilo: arte        # arte = capa original desenhada (sem copyright) | quadro = frame da live
   capa: true               # gera capa com o gancho gigante no quadro de pico
   legendas: true           # transcreve o áudio e queima legenda estilo TikTok

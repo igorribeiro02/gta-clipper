@@ -32,6 +32,23 @@ def transcrever(caminho: str, modelo: str = "small", idioma: str = "pt") -> list
     return palavras
 
 
+PALAVROES = {
+    "fuck": "f*ck", "fucking": "f*cking", "fucked": "f*cked", "motherfucker": "m*therf*cker",
+    "shit": "sh*t", "bitch": "b*tch", "pussy": "p*ssy", "dick": "d*ck", "cunt": "c*nt",
+    "porra": "p*rra", "caralho": "c*ralho", "merda": "m*rda", "foda": "f*da", "fodase": "f*dase",
+    "puta": "p*ta", "buceta": "b*ceta", "cu": "c*", "viado": "v*ado", "arrombado": "arr*mbado",
+}
+
+
+def censurar(txt: str) -> str:
+    import re
+    def troca(m):
+        w = m.group(0)
+        r = PALAVROES.get(w.lower())
+        return r.upper() if r and w.isupper() else (r or w)
+    return re.sub(r"[A-Za-zÀ-ÿ]+", troca, txt)
+
+
 def agrupar(palavras: list[dict], max_palavras: int = 3, max_gap: float = 0.6) -> list[dict]:
     blocos, atual = [], []
     for w in palavras:
@@ -42,7 +59,7 @@ def agrupar(palavras: list[dict], max_palavras: int = 3, max_gap: float = 0.6) -
     if atual:
         blocos.append(atual)
     return [
-        {"inicio": b[0]["inicio"], "fim": b[-1]["fim"], "texto": " ".join(x["texto"] for x in b)}
+        {"inicio": b[0]["inicio"], "fim": b[-1]["fim"], "texto": censurar(" ".join(x["texto"] for x in b))}
         for b in blocos
     ]
 
