@@ -231,7 +231,6 @@ def rodar(teste: bool = False):
 
     fila = filtrar_e_ranquear(coletar(cfg), cfg, st)
     print(f"{len(fila)} candidatos novos após filtro")
-    horarios = proximos_horarios(cfg, st)
     feitos = 0
     limite = cfg["postagem"]["max_cortes_por_execucao"]
 
@@ -239,18 +238,12 @@ def rodar(teste: bool = False):
         if feitos >= limite:
             break
         camp = (c.extra.get("cfg_streamer") or {}).get("campanha")
-        if camp and camp.get("horarios"):  # campanha paga tem horários próprios
-            horario = next(proximos_horarios(cfg, st, lista=camp["horarios"]), None)
-            if horario is None:
-                continue
-        else:
-            horario = next(horarios, None)
-            if horario is None:
-                print("Agenda cheia pelos próximos dias — nada a fazer.")
-                break
-        if not cota_streamer_ok(cfg, st, c.streamer, horario):
-            if not (camp and camp.get("horarios")):
-                horarios = itertools.chain([horario], horarios)  # devolve o horário pro próximo clipe
+        lista = camp.get("horarios") if camp else None
+        # primeiro horário livre (hoje ou nos próximos dias) em que o streamer ainda não bateu a cota do dia
+        horario = next((h for h in proximos_horarios(cfg, st, dias=4, lista=lista)
+                        if cota_streamer_ok(cfg, st, c.streamer, h)), None)
+        if horario is None:
+            print(f"Sem horário livre pros próximos dias para {c.streamer} — pulando")
             continue
         s_cfg = c.extra.get("cfg_streamer") or {}
         redes_corte = s_cfg.get("redes") or (camp or {}).get("redes") or cfg["redes"]
@@ -328,11 +321,8 @@ def rodar(teste: bool = False):
             feitos += 1
         except ConteudoBloqueado as e:
             print(f"  ✖ pulado ({e})")
-            horarios = proximos_horarios(cfg, st)
         except Exception:
             traceback.print_exc()
-            # devolve o horário pra fila tentando outro clipe
-            horarios = proximos_horarios(cfg, st)
         st["vistos"][c.chave] = time.time()
 
     if not teste:
