@@ -8,7 +8,10 @@
   "kick:clip_01M7VMK9PVXWXQC5FF7RSB1QFS": 1795221180.3551614,
   "kick:clip_01M7WCWWWM28VRGMS45SVJJV95": 1795221184.4597414,
   "kick:clip_01M7W028A7D2G4HTE4AS6BM6VY": 1795221193.5059245,
-  "kick:clip_01M7V62GNSGRYSBVPCNJWVFG2Q": 1795221237.4870367
+  "kick:clip_01M7V62GNSGRYSBVPCNJWVFG2Q": 1795221237.4870367,
+  "kick:clip_01M7V8SFFG8Q33TT3BZ284VTP6": 1795225831.6139028,
+  "kick:clip_01M7V8SCRC2ZP81Y679PV8X30N": 1795225841.5837424,
+  "kick:clip_01M7V48HW62RWAZHAMYJFTVHY9": 1795225889.6827943
  },
  "agendados": [
   {
@@ -76,9 +79,20 @@
    "post_id": null,
    "gancho": "Dasgas Dom saw this in GTA 6 and couldn't believe it!!",
    "avisado_publicacao": true
+  },
+  {
+   "chave": "kick:clip_01M7V48HW62RWAZHAMYJFTVHY9",
+   "streamer": "Coringa",
+   "horario": "2026-11-21T08:30:00",
+   "vod_id": "138888157",
+   "vod_offset": null,
+   "ts": 1795225889.6827915,
+   "post_id": null,
+   "gancho": "Olha o que aconteceu no GTA 6 no meio da live do Coringa!!",
+   "avisado_publicacao": true
   }
  ],
  "posts_mes": {
-  "2026-11": 6
+  "2026-11": 9
  }
 }
