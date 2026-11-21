@@ -4,7 +4,11 @@
   "kick:clip_01M7SFMAS45A904V70KC8FMSSV": 1795174656.66351,
   "kick:clip_01M7T8NW38SM5KNMGZVSG8ZKJE": 1795177228.9808981,
   "kick:clip_01M7THM2RSAWBDEEEZZQXBFN3M": 1795177266.0995638,
-  "kick:clip_01M7S7X3HZTF1APKQ0SDTYGHY9": 1795177346.631426
+  "kick:clip_01M7S7X3HZTF1APKQ0SDTYGHY9": 1795177346.631426,
+  "kick:clip_01M7VMK9PVXWXQC5FF7RSB1QFS": 1795221180.3551614,
+  "kick:clip_01M7WCWWWM28VRGMS45SVJJV95": 1795221184.4597414,
+  "kick:clip_01M7W028A7D2G4HTE4AS6BM6VY": 1795221193.5059245,
+  "kick:clip_01M7V62GNSGRYSBVPCNJWVFG2Q": 1795221237.4870367
  },
  "agendados": [
   {
@@ -61,9 +65,20 @@
    "post_id": null,
    "gancho": "Dasgas Dom saw this in GTA 6 and couldn't believe it!!",
    "avisado_publicacao": true
+  },
+  {
+   "chave": "kick:clip_01M7V62GNSGRYSBVPCNJWVFG2Q",
+   "streamer": "Dasgas Dom",
+   "horario": "2026-11-21T10:20:00",
+   "vod_id": "138782650",
+   "vod_offset": null,
+   "ts": 1795221237.4870346,
+   "post_id": null,
+   "gancho": "Dasgas Dom saw this in GTA 6 and couldn't believe it!!",
+   "avisado_publicacao": true
   }
  ],
  "posts_mes": {
-  "2026-11": 5
+  "2026-11": 6
  }
 }
