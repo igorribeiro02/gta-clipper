@@ -42,6 +42,9 @@ def buscar(streamer: dict, janela_horas: int, views_minimas: int) -> list[Candid
         criado = _data(c.get("created_at"))
         if views < views_minimas or (agora - criado).total_seconds() > janela_horas * 3600:
             continue
+        categoria = str((c.get("category") or {}).get("name", ""))
+        if "grand theft auto" not in categoria.lower() and "gta" not in categoria.lower():
+            continue  # só clipes de GTA (pula "Just Chatting", outros jogos etc.)
         cid = str(c.get("id"))
         out.append(
             Candidato(

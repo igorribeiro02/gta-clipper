@@ -108,17 +108,6 @@
    "avisado_publicacao": true
   },
   {
-   "chave": "kick:clip_01M7XEXHRCSP7FD9BKV608DPA4",
-   "streamer": "Dasgas Dom",
-   "horario": "2026-11-22T10:20:00",
-   "vod_id": "139176481",
-   "vod_offset": null,
-   "ts": 1795298272.8606298,
-   "post_id": null,
-   "gancho": "Bro's girlfriend won't be happy about this",
-   "avisado_publicacao": true
-  },
-  {
    "chave": "kick:clip_01M7XB37569GHGJ2S5QBKCT3KB",
    "streamer": "Coringa",
    "horario": "2026-11-22T08:30:00",
@@ -131,6 +120,6 @@
   }
  ],
  "posts_mes": {
-  "2026-11": 18
+  "2026-11": 16
  }
 }
