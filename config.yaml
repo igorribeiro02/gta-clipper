@@ -98,7 +98,6 @@ streamers:
   - nome: Coringa
     plataforma: kick
     canal: coringa
-    redes: [tiktok]            # só TikTok enquanto estiver no Metricool grátis
     autorizado: true
     onde_autorizou: "autorização direta ao Igor (20/11/2026)"
 
@@ -127,7 +126,7 @@ streamers:
       nome: "Dasgasd3m x RUCKUS"
       link: "https://contentrewards.com/c/campaigns/051002dd-5c46-43d0-a446-43f2957ba3a9"
       tag: "#dasgasdom3"
-      redes: [tiktok]          # campanha aceita TikTok e YouTube; só TikTok no plano grátis
+      redes: [tiktok, youtube] # campanha aceita só TikTok e YouTube Shorts (Instagram não)
       horarios: ["10:20", "14:20", "18:20", "21:20"]
 
   # Campos opcionais por streamer:
