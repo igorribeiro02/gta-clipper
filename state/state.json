@@ -11,7 +11,10 @@
   "kick:clip_01M7V62GNSGRYSBVPCNJWVFG2Q": 1795221237.4870367,
   "kick:clip_01M7V8SFFG8Q33TT3BZ284VTP6": 1795225831.6139028,
   "kick:clip_01M7V8SCRC2ZP81Y679PV8X30N": 1795225841.5837424,
-  "kick:clip_01M7V48HW62RWAZHAMYJFTVHY9": 1795225889.6827943
+  "kick:clip_01M7V48HW62RWAZHAMYJFTVHY9": 1795225889.6827943,
+  "kick:clip_01M7XAN6B2RJ5H3G8FX5S3ZYMM": 1795297837.1124704,
+  "kick:clip_01M7XW8N1G9TTF698X70GZYKWR": 1795297871.7392654,
+  "kick:clip_01M7XBKAAN73WQDV4T4RQDR29B": 1795297969.1979282
  },
  "agendados": [
   {
@@ -90,9 +93,42 @@
    "post_id": null,
    "gancho": "Olha o que aconteceu no GTA 6 no meio da live do Coringa!!",
    "avisado_publicacao": true
+  },
+  {
+   "chave": "kick:clip_01M7XAN6B2RJ5H3G8FX5S3ZYMM",
+   "streamer": "Coringa",
+   "horario": "2026-11-22T08:30:00",
+   "vod_id": "139130217",
+   "vod_offset": null,
+   "ts": 1795297837.1124685,
+   "post_id": null,
+   "gancho": "Isso aconteceu no GTA 6 ao vivo e o Coringa ficou sem reação!!",
+   "avisado_publicacao": true
+  },
+  {
+   "chave": "kick:clip_01M7XW8N1G9TTF698X70GZYKWR",
+   "streamer": "Coringa",
+   "horario": "2026-11-23T08:30:00",
+   "vod_id": "139130217",
+   "vod_offset": null,
+   "ts": 1795297871.7392638,
+   "post_id": null,
+   "gancho": "Olha o que aconteceu no GTA 6 no meio da live do Coringa!!",
+   "avisado_publicacao": true
+  },
+  {
+   "chave": "kick:clip_01M7XBKAAN73WQDV4T4RQDR29B",
+   "streamer": "Coringa",
+   "horario": "2026-11-24T08:30:00",
+   "vod_id": "139130217",
+   "vod_offset": null,
+   "ts": 1795297969.1979268,
+   "post_id": null,
+   "gancho": "O Coringa viu isso no GTA 6 e não acreditou!!",
+   "avisado_publicacao": true
   }
  ],
  "posts_mes": {
-  "2026-11": 10
+  "2026-11": 19
  }
 }
