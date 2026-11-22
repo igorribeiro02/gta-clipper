@@ -118,20 +118,9 @@
    "post_id": null,
    "gancho": "O Coringa viu isso no GTA 6 e não acreditou!!",
    "avisado_publicacao": true
-  },
-  {
-   "chave": "kick:clip_01M7XEVF3YE03N39XB0EW2K3KV",
-   "streamer": "Coringa",
-   "horario": "2026-11-23T08:30:00",
-   "vod_id": "139130217",
-   "vod_offset": null,
-   "ts": 1795298539.676176,
-   "post_id": null,
-   "gancho": "Isso aconteceu no GTA 6 ao vivo e o Coringa ficou sem reação!!",
-   "avisado_publicacao": true
   }
  ],
  "posts_mes": {
-  "2026-11": 19
+  "2026-11": 16
  }
 }
