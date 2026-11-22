@@ -20,7 +20,8 @@
   "kick:clip_01M7XEVF3YE03N39XB0EW2K3KV": 1795298539.6761775,
   "kick:clip_01M7ZFSYXKTVDJNHBNS9ZCRWEZ": 1795367707.1237776,
   "kick:clip_01M7ZMVMAYAZ881PHCS9NYG8KP": 1795367712.526142,
-  "kick:clip_01M7ZDCVD4XBAPSP4E4DAJVJMX": 1795367738.52112
+  "kick:clip_01M7ZDCVD4XBAPSP4E4DAJVJMX": 1795367738.52112,
+  "kick:clip_01M7ZXT8BGRK0VAC0ED6411EAX": 1795368825.4933937
  },
  "agendados": [
   {
@@ -121,9 +122,20 @@
    "post_id": null,
    "gancho": "O Coringa viu isso no GTA 6 e não acreditou!!",
    "avisado_publicacao": true
+  },
+  {
+   "chave": "kick:clip_01M7ZXT8BGRK0VAC0ED6411EAX",
+   "streamer": "Coringa",
+   "horario": "2026-11-23T08:30:00",
+   "vod_id": "139392758",
+   "vod_offset": null,
+   "ts": 1795368825.4933925,
+   "post_id": null,
+   "gancho": "O Coringa não esperava isso no GTA 6 e o chat foi à loucura!!",
+   "avisado_publicacao": true
   }
  ],
  "posts_mes": {
-  "2026-11": 16
+  "2026-11": 19
  }
 }
