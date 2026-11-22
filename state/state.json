@@ -121,20 +121,9 @@
    "post_id": null,
    "gancho": "O Coringa viu isso no GTA 6 e não acreditou!!",
    "avisado_publicacao": true
-  },
-  {
-   "chave": "kick:clip_01M7ZFSYXKTVDJNHBNS9ZCRWEZ",
-   "streamer": "Dasgas Dom",
-   "horario": "2026-11-22T18:20:00",
-   "vod_id": "138782650",
-   "vod_offset": null,
-   "ts": 1795367707.1237755,
-   "post_id": null,
-   "gancho": "Dasgas Dom did NOT expect this in GTA 6 and chat lost it!!",
-   "avisado_publicacao": true
   }
  ],
  "posts_mes": {
-  "2026-11": 18
+  "2026-11": 16
  }
 }
