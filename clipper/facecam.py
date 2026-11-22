@@ -44,13 +44,25 @@ def detectar(caminho: str, dur: float):
             deteccoes.append((i, x / W, y / H, w / W, h / H))
     if not deteccoes or not W:
         return None
+    imgs = [cv2.imread(q, cv2.IMREAD_GRAYSCALE) for q in quadros]
+
+    def mexe(x, y, w, h) -> bool:
+        """Webcam tem gente se mexendo; quadro/pôster na parede fica parado."""
+        X, Y, Wp, Hp = int(x * W), int(y * H), max(int(w * W), 8), max(int(h * H), 8)
+        recortes = [cv2.resize(i[Y:Y + Hp, X:X + Wp], (48, 48)) for i in imgs if i is not None]
+        if len(recortes) < 3:
+            return False
+        import numpy as np
+        dif = np.mean([np.mean(cv2.absdiff(recortes[k], recortes[k + 1])) for k in range(len(recortes) - 1)])
+        return dif > 3.0
+
     # agrupa rostos no mesmo lugar e conta em quantos quadros diferentes apareceram
     melhor, votos = None, 0
     for _, x, y, w, h in deteccoes:
         cx, cy = x + w / 2, y + h / 2
         quadros_com = {j for j, x2, y2, w2, h2 in deteccoes
                        if abs((x2 + w2 / 2) - cx) < w * 0.6 and abs((y2 + h2 / 2) - cy) < h * 0.6}
-        if len(quadros_com) > votos:
+        if len(quadros_com) > votos and mexe(x, y, w, h):
             melhor, votos = (x, y, w, h), len(quadros_com)
     if votos < max(3, len(quadros) // 2):
         return None

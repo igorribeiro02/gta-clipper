@@ -148,6 +148,8 @@ def produzir(c: Candidato, cfg: dict, pasta: str) -> tuple[str, dict, str | None
     if not fc and v.get("facecam_auto", True):
         fc = facecam.detectar(bruto, dur_total)
         print(f"  [facecam] {'achei em ' + str(fc) if fc else 'não achei, usando fundo desfocado'}")
+    if not fc and (c.extra.get("cfg_streamer") or {}).get("campanha"):
+        raise ConteudoBloqueado("campanha exige o rosto do streamer e a câmera não foi encontrada")
 
     # 2) trecho + textos: IA (se tiver chave) ou algoritmo de volume/fala
     alvo = min(v.get("duracao_alvo_s", 38), cfg["filtros"]["duracao_max_s"])

@@ -23,14 +23,18 @@ def analisar(video: str, dividido: bool) -> tuple[bool, dict]:
     with tempfile.TemporaryDirectory() as d:
         subprocess.run(["ffmpeg", "-loglevel", "error", "-i", video, "-vf", f"fps=1,{recorte}",
                         os.path.join(d, "%03d.jpg")], check=True)
-        quadros, forte = Counter(), 0.0
+        quadros, forte, roupa = Counter(), 0.0, Counter()
         for f in sorted(os.listdir(d)):
             achou = set()
             for det in _det.detect(os.path.join(d, f)):
                 if det["class"] in EXPLICITO and det["score"] >= 0.4:
                     achou.add(det["class"])
                     forte = max(forte, det["score"])
+                if det["class"] in ("FEMALE_GENITALIA_COVERED", "FEMALE_BREAST_COVERED") and det["score"] >= 0.5:
+                    achou.add("ROUPA_INTIMA_" + det["class"].split("_")[1])
             for a in achou:
-                quadros[a] += 1
+                (roupa if a.startswith("ROUPA") else quadros)[a] += 1
     total = sum(quadros.values())
-    return (total >= 2 or forte >= 0.6), {**quadros, "max": round(forte, 2)}
+    # personagem só de calcinha/sutiã por vários segundos também derruba alcance de conta nova
+    lingerie = roupa["ROUPA_INTIMA_GENITALIA"] >= 3 or roupa["ROUPA_INTIMA_BREAST"] >= 5
+    return (total >= 2 or forte >= 0.6 or lingerie), {**quadros, **roupa, "max": round(forte, 2)}
